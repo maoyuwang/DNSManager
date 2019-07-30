@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="MainForm">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="729" height="539"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="84793" binding="panel3" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="55644" class="javax.swing.JButton" binding="btAdd">
+            <constraints/>
+            <properties>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <label value="Add"/>
+              <text value="Add"/>
+            </properties>
+          </component>
+          <component id="ad50f" class="javax.swing.JButton" binding="btConfig">
+            <constraints/>
+            <properties>
+              <label value="Config"/>
+              <text value="Config"/>
+            </properties>
+          </component>
+          <component id="3b72e" class="javax.swing.JButton" binding="btDelete">
+            <constraints/>
+            <properties>
+              <label value="Delete"/>
+              <text value="Delete"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <scrollpane id="b6ba4" binding="spanel1">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="630a3" class="javax.swing.JTable" binding="table1" default-binding="true">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
+      </scrollpane>
+    </children>
+  </grid>
+</form>
