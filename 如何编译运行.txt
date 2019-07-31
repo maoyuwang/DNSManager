@@ -1,0 +1,3 @@
+切换到src目录,再执行下面编译和运行命令
+javac -cp .;forms_rt.jar -encoding utf-8 *.java
+java -cp .;forms_rt.jar App
