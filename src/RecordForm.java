@@ -57,8 +57,8 @@ public class RecordForm extends JDialog {
         setMinimumSize(dim);
         setLocationRelativeTo(this.getOwner());
         model = new DefaultTableModel(//
-                new Object[][]{},// 数据
-                new Object[]{"Name", "Type", "Value", "TTL", "Edit", "Delete"} // 表头
+                new Object[][]{},//data
+                new Object[]{"Name", "Type", "Value", "TTL", "Edit", "Delete"} // name of value
         );
         table1.setModel(model);
         table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -70,7 +70,7 @@ public class RecordForm extends JDialog {
         btAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // JOptionPane.showMessageDialog(null, "在对话框内显示的描述性的文字", "标题", JOptionPane.ERROR_MESSAGE);
+                // JOptionPane.showMessageDialog(null, "comments", "title", JOptionPane.ERROR_MESSAGE);
                 OpenNewRecordForm();
             }
         });
