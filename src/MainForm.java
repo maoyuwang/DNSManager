@@ -19,18 +19,17 @@ public class MainForm extends JFrame {
         // setBounds(300,300,800,600);
         setTitle("DNS Manager");
         setContentPane(panel1);
-        Toolkit tk = this.getToolkit();// 得到窗口工具条
+        Toolkit tk = this.getToolkit();// get the menu bar
         int width = 600;
         int height = 500;
         Dimension dm = tk.getScreenSize();
-        setSize(width, height);// 设置程序的大小
+        setSize(width, height);// set the size of GUI
         setLocation((int) (dm.getWidth() - width) / 2,
-                (int) (dm.getHeight() - height) / 2);// 显示在屏幕中央
-
+                (int) (dm.getHeight() - height) / 2);// show in the middle of screen
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         model = new DefaultTableModel(//
-                new Object[][]{},// 数据
-                new Object[]{"", "Company", "Public", "Private key"} // 表头
+                new Object[][]{},// data
+                new Object[]{"", "Company", "Public", "Private key"} // name of values
         );
         table1.setModel(model);
         table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -48,7 +47,7 @@ public class MainForm extends JFrame {
         btAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // JOptionPane.showMessageDialog(null, "在对话框内显示的描述性的文字", "标题", JOptionPane.ERROR_MESSAGE);
+                // JOptionPane.showMessageDialog(null, "comments", "title", JOptionPane.ERROR_MESSAGE);
                 OpenDNSForm();
             }
         });
@@ -72,8 +71,8 @@ public class MainForm extends JFrame {
 //                tc.setPreferredWidth(20);
 //                tc.setResizable(false);
 //                btDelete.setVisible(true);
-                int selectedRow = table1.getSelectedRow();//获得选中行的索引
-                if (selectedRow != -1)   //是否存在选中行
+                int selectedRow = table1.getSelectedRow();//get the index of chosen line
+                if (selectedRow != -1)   //whether choose the particular line
                 {
                     OpenRecordForm(model.getValueAt(selectedRow, 1).toString());
                     //修改指定的值：
