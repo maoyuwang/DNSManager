@@ -8,6 +8,8 @@ public class App {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setBounds(400, 400, 800, 600);//the location and size of the father window
+
+ */
         MainForm mainForm=new MainForm();
         mainForm.setVisible(true);
     }
