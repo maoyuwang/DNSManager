@@ -9,40 +9,44 @@ public class CloudFlare extends DNSProvider {
         super(pubKey, privKey);
     }
 
+    public String[] getZones()
+    {
+        String[] result = null;
 
+        // 定义地址
+        String url = "https://api.cloudflare.com/client/v4/zones?page=1&per_page=10&order=type&direction=asc";
+
+        // 设置 Headers
+        HashMap<String,String> headers = new HashMap<String,String>();
+        headers.put("User-Agent","OkHttp Headers.java");
+        headers.put("X-Auth-Email",getPublicKey());
+        headers.put("X-Auth-Key",getPrivateKey());
+        headers.put("Content-Type","application/json");
+
+        // 调用得到结果
+        String returnStr = API.GET(url,headers);
+
+        // 处理JSON
+        JSONObject jsonObj = JSON.parseObject(returnStr);
+        JSONArray zones = jsonObj.getJSONArray("result");
+
+        result = new String[zones.size()];
+
+        for (int i = 0 ; i < zones.size(); i++)
+        {
+            JSONObject zone = zones.getJSONObject(i);
+            String zoneID = zone.get("id").toString();
+            result[i] = zoneID;
+
+        }
+
+
+        return result;
+    }
 
     @Override
     public Record[] getRecords() {
-
-        String url = "https://api.cloudflare.com/client/v4/zones?page=1&per_page=10&order=type&direction=asc";
-        OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .header("User-Agent", "OkHttp Headers.java")
-                    .addHeader("X-Auth-Email",getPublicKey())
-                    .addHeader("X-Auth-Key",getPrivateKey())
-                    .addHeader("Content-Type","application/json")
-                    .url(url)
-                    .build();
-            try{
-                Response r = client.newCall(request).execute();
-                String resultStr = r.body().string();
-                JSONObject j = JSON.parseObject(resultStr);
-                JSONArray ja = j.getJSONArray("result");
-                JSONObject ja2 = ja.getJSONObject(0);
-                System.out.println(ja2.get("name"));
-
-
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-
-            return null;
-
-
-
-
+        return null;
     }
 
     @Override
@@ -62,6 +66,10 @@ public class CloudFlare extends DNSProvider {
 
     public static void main(String[] args) {
         CloudFlare cf = new CloudFlare("wang.maoyu@hotmail.com","4c8394457166831f3d80fc7c98d9ad4a02ee1");
-        cf.getRecords();
+        String[] returnResult = cf.getZones();
+        for (String str : returnResult)
+        {
+            System.out.println(str);
+        }
     }
 }
