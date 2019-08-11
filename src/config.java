@@ -1,19 +1,14 @@
-import java.util.*;
 
-public abstract class DNSProvider {
-    private String publicKey,privateKey, name;
+public class config {
+	private String publicKey,privateKey, name;
 
-    public DNSProvider(String publicKey, String privateKey)
+    public config(String name, String publicKey, String privateKey)
     {
+    	this.name = name;
         this.publicKey = publicKey;
         this.privateKey = privateKey;
     }
     
-    public abstract Record[] getRecords();
-    public abstract void addRecord(Record r);
-    public abstract void deleteRecord(Record r);
-    public abstract void updateRecord(Record r);
-
     //Setter and Getter
     public String getPublicKey() {
         return publicKey;
@@ -30,4 +25,13 @@ public abstract class DNSProvider {
     public void setPrivateKey(String privateKey) {
         this.privateKey = privateKey;
     }
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }
