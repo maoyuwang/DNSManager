@@ -52,4 +52,55 @@ public class API {
         return resultStr;
 
     }
+
+
+    public static String PUT(String url, HashMap<String,String> headersMap, JSONObject jsonObject){
+        Headers headers = Headers.of(headersMap);
+        String resultStr = null;
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody form = RequestBody.create(JSON, jsonObject.toString());
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .headers(headers)
+                .put(form)
+                .url(url)
+                .build();
+        try{
+            Response r = client.newCall(request).execute();
+            resultStr = r.body().string();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return resultStr;
+
+    }
+
+    public static String DELETE(String url, HashMap<String,String> headersMap, JSONObject jsonObject){
+        Headers headers = Headers.of(headersMap);
+        String resultStr = null;
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody form = RequestBody.create(JSON, jsonObject.toString());
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .headers(headers)
+                .delete(form)
+                .url(url)
+                .build();
+        try{
+            Response r = client.newCall(request).execute();
+            resultStr = r.body().string();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return resultStr;
+
+    }
 }
