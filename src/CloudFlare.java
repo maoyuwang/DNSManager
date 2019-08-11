@@ -86,18 +86,18 @@ public class CloudFlare extends DNSProvider {
     }
 
     @Override
-    public void addRecord(Record r) {
-
+    public boolean addRecord(Record r) {
+        return true;
     }
 
     @Override
-    public void deleteRecord(Record r) {
-
+    public boolean deleteRecord(Record r) {
+        return true;
     }
 
     @Override
-    public void updateRecord(Record r) {
-
+    public boolean updateRecord(Record r) {
+        return true;
     }
 
     public static void main(String[] args) {
