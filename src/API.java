@@ -1,5 +1,6 @@
 import com.squareup.okhttp.*;
 import java.util.HashMap;
+import com.alibaba.fastjson.*;
 
 public class API {
     public static String GET(String url, HashMap<String,String> headersMap){
@@ -27,22 +28,12 @@ public class API {
 
     }
 
-    public static String POST(String url, HashMap<String,String> headersMap, HashMap<String,String> paramsMap){
+    public static String POST(String url, HashMap<String,String> headersMap, JSONObject jsonObject){
         Headers headers = Headers.of(headersMap);
         String resultStr = null;
-        FormEncodingBuilder formBuilder = new FormEncodingBuilder();
 
-        if(paramsMap!=null)
-        {
-            for(String key : paramsMap.keySet())
-            {
-                String value = paramsMap.get(key);
-                formBuilder.add(key,value);
-            }
-        }
-
-
-        RequestBody form = formBuilder.build();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody form = RequestBody.create(JSON, jsonObject.toString());
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .headers(headers)
