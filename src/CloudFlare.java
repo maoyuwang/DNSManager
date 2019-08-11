@@ -30,7 +30,9 @@ public class CloudFlare extends DNSProvider {
 
         // 处理JSON
         JSONObject jsonObj = JSON.parseObject(returnStr);
-        JSONArray zones = jsonObj.getJSONArray("result");
+        JSONArray zones = jsonObj.getJSONArray("domains");
+
+
 
         result = new HashMap<String,String>();
 
