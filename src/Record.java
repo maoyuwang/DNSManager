@@ -17,4 +17,16 @@ public class Record {
         super.clone();
         return new Record(domain,type,name,value);
     }
+
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("DOMAIN: " + domain +"\t");
+        builder.append("TYPE: " + type + "\t");
+        builder.append("NAME: " + name + "\t");
+        builder.append("VALUE: " + value + "\n");
+
+        return builder.toString();
+    }
 }
