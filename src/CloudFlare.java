@@ -71,7 +71,13 @@ public class CloudFlare extends DNSProvider {
 
             //parse and get information form the json string
             JSONObject jsonObj = JSON.parseObject(returnStr);
+            JSONArray records = jsonObj.getJSONArray("result");
 
+            for(int n=0 ; n < records.size() ; n++)
+            {
+                JSONObject record =records.getJSONObject(n);
+
+            }
 
         }
 
