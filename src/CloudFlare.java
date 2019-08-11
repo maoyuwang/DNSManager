@@ -9,9 +9,9 @@ public class CloudFlare extends DNSProvider {
         super(pubKey, privKey);
     }
 
-    public String[] getZones()
+    public HashMap<String,String> getZones()
     {
-        String[] result = null;
+        HashMap<String,String> result = null;
 
         // 定义地址
         String url = "https://api.cloudflare.com/client/v4/zones?page=1&per_page=10&order=type&direction=asc";
@@ -30,14 +30,16 @@ public class CloudFlare extends DNSProvider {
         JSONObject jsonObj = JSON.parseObject(returnStr);
         JSONArray zones = jsonObj.getJSONArray("result");
 
-        result = new String[zones.size()];
+        result = new HashMap<String,String>();
+
+//        System.out.println( returnStr );
 
         for (int i = 0 ; i < zones.size(); i++)
         {
             JSONObject zone = zones.getJSONObject(i);
             String zoneID = zone.get("id").toString();
-            result[i] = zoneID;
-
+            String domain = zone.get("name").toString();
+            result.put(domain,zoneID);
         }
 
 
@@ -46,6 +48,34 @@ public class CloudFlare extends DNSProvider {
 
     @Override
     public Record[] getRecords() {
+
+        //get all zones we have
+        HashMap<String,String> ZoneMap = this.getZones();
+
+        //location-setting
+        for( Map.Entry<String, String> entryitr : ZoneMap.entrySet() ) {
+            String domain = entryitr.getKey();
+            String zone = entryitr.getValue();
+
+            String url = String.format("https://api.cloudflare.com/client/v4/zones/%s/dns_records", zone );
+
+            //settign headers
+            HashMap<String,String> headers = new HashMap<String,String>();
+            headers.put("User-Agent","OkHttp Headers.java");
+            headers.put("X-Auth-Email",getPublicKey());
+            headers.put("X-Auth-Key",getPrivateKey());
+            headers.put("Content-Type","application/json");
+
+            //get results
+            String returnStr = API.GET(url , headers);
+
+            //parse and get information form the json string
+            JSONObject jsonObj = JSON.parseObject(returnStr);
+
+
+        }
+
+
         return null;
     }
 
@@ -66,10 +96,6 @@ public class CloudFlare extends DNSProvider {
 
     public static void main(String[] args) {
         CloudFlare cf = new CloudFlare("wang.maoyu@hotmail.com","4c8394457166831f3d80fc7c98d9ad4a02ee1");
-        String[] returnResult = cf.getZones();
-        for (String str : returnResult)
-        {
-            System.out.println(str);
-        }
+        cf.getRecords();
     }
 }
