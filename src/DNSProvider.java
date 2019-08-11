@@ -10,9 +10,9 @@ public abstract class DNSProvider {
     }
     
     public abstract Record[] getRecords();
-    public abstract void addRecord(Record r);
-    public abstract void deleteRecord(Record r);
-    public abstract void updateRecord(Record r);
+    public abstract boolean addRecord(Record r);
+    public abstract boolean deleteRecord(Record r);
+    public abstract boolean updateRecord(Record r);
 
     //Setter and Getter
     public String getPublicKey() {
