@@ -124,19 +124,66 @@ public class CloudFlare extends DNSProvider {
 
     @Override
     public boolean deleteRecord(Record r) {
-        return true;
+        //get all the Records in the Zone and initializer
+        String zoneid = this.getZones().get(r.domain);
+        JSONObject jsonObj = this.getDomainRecords( zoneid );
+        JSONArray records = jsonObj.getJSONArray("result");
+        String url = "https://api.cloudflare.com/client/v4/zones/%s/dns_records/%s";
+
+
+        // iterate all the zones to find out which specific zone we need to delete
+        for(int n=0 ; n < records.size() ; n++) {
+            JSONObject record = records.getJSONObject(n);
+
+            if( r.name.equals(record.get("name") ) ) {
+                String recordid = record.get("id").toString();
+                url = String.format(url, zoneid, recordid);
+                API.DELETE(url, headers, new JSONObject());
+                //TODO: for Delete we don't need any new JSONObject
+                break;
+            }
+        }
+            return true;
     }
 
     @Override
     public boolean updateRecord(Record r) {
+        //get all the Records in the Zone and initializer
+        String zoneid = this.getZones().get(r.domain);
+        String recordid = null;
+        String url = "https://api.cloudflare.com/client/v4/zones/%s/dns_records/%s" ;
+
+        //finding the specific zoneid and recordid
+        JSONObject jsonObj = this.getDomainRecords( zoneid );
+        JSONArray records = jsonObj.getJSONArray("result");
+
+        //find the recordid
+        for(int n=0 ; n < records.size() ; n++) {
+            JSONObject record = records.getJSONObject(n);
+
+            if (r.name.equals(record.get("name"))) {
+                recordid = record.get("id").toString();
+                break;
+            }
+        }
+        //create the update json object for the PUT
+        JSONObject updateObj = new JSONObject();
+        updateObj.put("type", r.type);
+        updateObj.put("name", r.name);
+        updateObj.put("content", r.value);
+        updateObj.put("ttl", 1);
+        updateObj.put("proxied",false);
+
+        API.PUT(url, headers, updateObj);
+
         return true;
     }
 
     public static void main(String[] args) {
         CloudFlare cf = new CloudFlare("wang.maoyu@hotmail.com","4c8394457166831f3d80fc7c98d9ad4a02ee1");
-//        cf.getRecords();
+        cf.getRecords();
         cf.addRecord(new Record("ylws.me","A","test1", "114.114.114.114" ) );
-//        cf.updateRecord(new Reocrd("ylws.me","") )
+
     }
 
 
