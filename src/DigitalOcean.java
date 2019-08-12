@@ -2,8 +2,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class DigitalOcean extends DNSProvider {
 
@@ -12,6 +11,7 @@ public class DigitalOcean extends DNSProvider {
     DigitalOcean(String pubKey,String pravKey)
     {
         super(pubKey,pravKey);
+        pubKey = "Bearer";
 
         headers = new HashMap<String,String>();
         headers.put("User-Agent","OkHttp Headers.java");
@@ -47,10 +47,22 @@ public class DigitalOcean extends DNSProvider {
     @Override
     public Record[] getRecords() {
 
-        Record[] r = null;
+        Record[] result = null;
         ArrayList<Record> Rlst = new ArrayList<Record>();
         //getting all the domains
-        String[] domains = (String [])this.getZones().keySet().toArray();
+
+        Set<String> zones = getZones().keySet();
+
+        String[] domains = new String[zones.size()];
+        Iterator<String> it = zones.iterator();
+        int domainsIndex = 0;
+
+        while (it.hasNext())
+        {
+            domains[domainsIndex++] = it.next();
+        }
+
+
         //from all the domains, get all the records
         for(int n=0; n < domains.length ; n++) {
             JSONObject jsonObj = getDomainRecords( domains[n] );
@@ -70,7 +82,14 @@ public class DigitalOcean extends DNSProvider {
 
         }
 
-        return (Record[])Rlst.toArray() ;
+        result = new Record[Rlst.size()];
+
+        for (int i = 0 ; i < Rlst.size(); i ++)
+        {
+            result[i] = Rlst.get(i);
+        }
+
+        return result ;
     }
 
     @Override
@@ -102,14 +121,14 @@ public class DigitalOcean extends DNSProvider {
         for(int i=0; i< jsonArray.size(); i++) {
             JSONObject record = jsonArray.getJSONObject(i);
 
-            if(record.get("type").toString().equals(r.type) && record.get("name").toString().equals(r.name) && record.get("value").toString().equals(r.value) )
+            if(record.get("type").toString().equals(r.type) && record.get("name").toString().equals(r.name) && record.get("data").toString().equals(r.value) )
             {
                 recordid = record.getString("id");
             }
         }
 
         url = String.format("https://api.digitalocean.com/v2/domains/%s/records/%s", r.domain , recordid);
-        API.DELETE(url, headers , null);
+        API.DELETE(url, headers , new JSONObject());
 
         return true;
     }
@@ -122,15 +141,16 @@ public class DigitalOcean extends DNSProvider {
         String url = null;
         for(int i=0; i< jsonArray.size(); i++) {
             JSONObject record = jsonArray.getJSONObject(i);
+            System.out.println(record.toJSONString());
 
-            if(record.get("type").toString().equals(r.type) && record.get("name").toString().equals(r.name) && record.get("value").toString().equals(r.value) )
+            if(record.get("type").toString().equals(r.type) && record.get("name").toString().equals(r.name))
             {
                 recordid = record.getString("id");
             }
         }
 
         JSONObject updateObj = new JSONObject();
-        updateObj.put("name", r.name);
+        updateObj.put("data", r.value);
 
         url = String.format("https://api.digitalocean.com/v2/domains/%s/records/%s",r.domain , recordid);
         API.PUT(url, headers, updateObj);
@@ -139,6 +159,16 @@ public class DigitalOcean extends DNSProvider {
     }
 
     public static void main(String[] args) {
-        DigitalOcean do = new DigitalOcean("Domain","e60ff79a8706c6d618fc64e6eed56f0b0eef89d9bb3c99e0e7f19b4681209b05");
+        DigitalOcean DO = new DigitalOcean("Domain","e60ff79a8706c6d618fc64e6eed56f0b0eef89d9bb3c99e0e7f19b4681209b05");
+
+
+
+        DO.deleteRecord(new Record("function.club","A","test","127.0.0.1"));
+        Record[] result = DO.getRecords();
+        for (Record r : result)
+        {
+            System.out.println(r);
+        }
+
     }
 }

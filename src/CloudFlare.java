@@ -30,7 +30,7 @@ public class CloudFlare extends DNSProvider {
 
         // 处理JSON
         JSONObject jsonObj = JSON.parseObject(returnStr);
-        JSONArray zones = jsonObj.getJSONArray("domains");
+        JSONArray zones = jsonObj.getJSONArray("result");
 
 
 
@@ -81,7 +81,7 @@ public class CloudFlare extends DNSProvider {
                     String RecordName = record.get("name").toString();
                     String RecordValue = record.get("content").toString();
 
-                    String[] name_lst = RecordName.split(".");
+                    String[] name_lst = RecordName.split("\\.");
                     if (name_lst.length != 2) {
                         RecordName = name_lst[0];
                     }
@@ -90,7 +90,11 @@ public class CloudFlare extends DNSProvider {
                 }
             }
         }
-        result = (Record[])RecordList.toArray();
+        result = new Record[RecordList.size()];
+        for (int i = 0 ; i < RecordList.size(); i++)
+        {
+            result[i] = RecordList.get(i);
+        }
         return result;
     }
 
@@ -128,7 +132,7 @@ public class CloudFlare extends DNSProvider {
     public boolean deleteRecord(Record r) {
         //get all the Records in the Zone and initializer
         String zoneid = this.getZones().get(r.domain);
-        JSONObject jsonObj = this.getDomainRecords( zoneid );
+        JSONObject jsonObj = this.getDomainRecords( r.domain );
         JSONArray records = jsonObj.getJSONArray("result");
         String url = "https://api.cloudflare.com/client/v4/zones/%s/dns_records/%s";
 
@@ -137,10 +141,11 @@ public class CloudFlare extends DNSProvider {
         for(int n=0 ; n < records.size() ; n++) {
             JSONObject record = records.getJSONObject(n);
 
-            if( r.name.equals(record.get("name") ) ) {
+            if( r.name.equals(record.getString("name").split("\\.")[0] ) ) {
                 String recordid = record.get("id").toString();
                 url = String.format(url, zoneid, recordid);
-                API.DELETE(url, headers, new JSONObject());
+                System.out.println(API.DELETE(url, headers, new JSONObject()));
+
                 //TODO: for Delete we don't need any new JSONObject
                 break;
             }
@@ -156,18 +161,22 @@ public class CloudFlare extends DNSProvider {
         String url = "https://api.cloudflare.com/client/v4/zones/%s/dns_records/%s" ;
 
         //finding the specific zoneid and recordid
-        JSONObject jsonObj = this.getDomainRecords( zoneid );
+        JSONObject jsonObj = this.getDomainRecords( r.domain );
         JSONArray records = jsonObj.getJSONArray("result");
 
         //find the recordid
         for(int n=0 ; n < records.size() ; n++) {
             JSONObject record = records.getJSONObject(n);
 
-            if (r.name.equals(record.get("name"))) {
+            if (r.name.equals(record.getString("name").split("\\.")[0])) {
                 recordid = record.get("id").toString();
                 break;
             }
         }
+
+        url = String.format(url,zoneid,recordid);
+
+
         //create the update json object for the PUT
         JSONObject updateObj = new JSONObject();
         updateObj.put("type", r.type);
@@ -176,7 +185,9 @@ public class CloudFlare extends DNSProvider {
         updateObj.put("ttl", 1);
         updateObj.put("proxied",false);
 
+
         API.PUT(url, headers, updateObj);
+
 
         return true;
     }
@@ -184,7 +195,15 @@ public class CloudFlare extends DNSProvider {
     public static void main(String[] args) {
         CloudFlare cf = new CloudFlare("wang.maoyu@hotmail.com","4c8394457166831f3d80fc7c98d9ad4a02ee1");
         cf.getRecords();
-        cf.addRecord(new Record("ylws.me","A","test1", "114.114.114.114" ) );
+        //cf.addRecord(new Record("ylws.me","A","test1", "114.114.114.114" ) );
+        cf.updateRecord(new Record("ylws.me","A","test1","127.0.0.1"));
+        cf.deleteRecord(new Record("ylws.me","A","test1",""));
+
+//        Record[] result = cf.getRecords();
+//        for (Record r : result)
+//        {
+//            System.out.println(r);
+//        }
 
     }
 
