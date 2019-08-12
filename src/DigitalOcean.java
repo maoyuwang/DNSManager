@@ -137,4 +137,8 @@ public class DigitalOcean extends DNSProvider {
 
         return true;
     }
+
+    public static void main(String[] args) {
+        DigitalOcean do = new DigitalOcean("Domain","e60ff79a8706c6d618fc64e6eed56f0b0eef89d9bb3c99e0e7f19b4681209b05");
+    }
 }
