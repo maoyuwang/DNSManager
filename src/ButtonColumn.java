@@ -65,13 +65,12 @@ public class ButtonColumn extends AbstractCellEditor implements
         int i=table.getSelectedRow();
         if(e.getActionCommand()=="Edit")
         {
-            EditRecordForm editFm=new EditRecordForm(reCordFm,i,table.getValueAt(i,0).toString(),table.getValueAt(i,1).toString(),table.getValueAt(i,2).toString(),table.getValueAt(i,3).toString());
+            EditRecordForm editFm=new EditRecordForm(reCordFm,i,new Record(table.getValueAt(i,0).toString(),table.getValueAt(i,1).toString(),table.getValueAt(i,2).toString(),table.getValueAt(i,3).toString()));
             editFm.setVisible(true);
             this.reCordFm.getContentPane().add(editFm);
         }
         else if (e.getActionCommand()=="Delete")
         {
-
             reCordFm.DeleteRow(i);
         }
         System.out.println(e.getActionCommand() + "   :    "
