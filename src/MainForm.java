@@ -14,6 +14,7 @@ public class MainForm extends JFrame {
     private JTable table1;
     private DefaultTableModel model;
     private TableColumn tc;
+    public String[] provider_name = {"CloudFlare", "DigitalOcean", "GoDaddy", "NameCheap", "NameSilo", "Name.com", "Gandi"};
 
     public MainForm() {
         // setBounds(300,300,800,600);
@@ -29,7 +30,7 @@ public class MainForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         model = new DefaultTableModel(//
                 new Object[][]{},// data
-                new Object[]{"", "Company", "Public", "Private key"} // name of values
+                new Object[]{"", "Name", "Public Key", "Private key"} // name of values
         );
         table1.setModel(model);
         table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -43,6 +44,9 @@ public class MainForm extends JFrame {
         tc.setMinWidth(20);
         tc.setPreferredWidth(20);
         tc.setResizable(false);
+        for (String name : provider_name) {
+            AddRow(new config(name, "", ""));
+        }
         //btDelete.setVisible(false);
         btAdd.addActionListener(new ActionListener() {
             @Override
@@ -74,7 +78,8 @@ public class MainForm extends JFrame {
                 int selectedRow = table1.getSelectedRow();//get the index of chosen line
                 if (selectedRow != -1)   //whether choose the particular line
                 {
-                    OpenRecordForm(model.getValueAt(selectedRow, 1).toString());
+                    config conf = new config(model.getValueAt(selectedRow, 1).toString(), model.getValueAt(selectedRow, 2).toString(), model.getValueAt(selectedRow, 3).toString());
+                    OpenRecordForm(conf);
                     //修改指定的值：
                     // tableModel.setValueAt(aTextField.getText(), selectedRow, 0);
                     // tableModel.setValueAt(bTextField.getText(), selectedRow, 1);
@@ -84,20 +89,25 @@ public class MainForm extends JFrame {
         });
     }
 
+
     private void OpenDNSForm() {
         DNSProviderForm dnsFm = new DNSProviderForm(this);
         dnsFm.setVisible(true);
         getContentPane().add(dnsFm);
     }
 
-    private void OpenRecordForm(String company) {
-        RecordForm recordFm = new RecordForm(this, company);
+    private void OpenRecordForm(config _conf) {
+        if (_conf.getName().contentEquals("") || _conf.getPublicKey().contentEquals("") || _conf.getPrivateKey().contentEquals("")) {
+            JOptionPane.showMessageDialog(null, "Name、PublicKey、PrivateKey CANNOT be empty", "Warning", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        RecordForm recordFm = new RecordForm(this, _conf);
         recordFm.setVisible(true);
         getContentPane().add(recordFm);
     }
 
-    public void AddRow(String company, String publicKey, String privateKy) {
-        model.addRow(new Object[]{false, company, publicKey, privateKy});
+    public void AddRow(config _conf) {
+        model.addRow(new Object[]{false, _conf.getName(), _conf.getPublicKey(), _conf.getPrivateKey()});
         table1.setModel(model);
     }
 
@@ -147,4 +157,5 @@ public class MainForm extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
+
 }

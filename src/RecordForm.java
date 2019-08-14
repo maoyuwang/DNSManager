@@ -12,16 +12,17 @@ public class RecordForm extends JDialog {
     private JTable table1;
     private DefaultTableModel model;
     private TableColumn tc;
+    private config conf;
     private MainForm mainFm;
-    private String Company;
+    public DNSProvider dp;
 
     public RecordForm() {
         init();
     }
 
-    public RecordForm(MainForm _mainFm, String _company) {
+    public RecordForm(MainForm _mainFm, config _conf) {
         this.mainFm = _mainFm;
-        this.Company = _company;
+        this.conf = _conf;
         init();
     }
 
@@ -31,25 +32,31 @@ public class RecordForm extends JDialog {
         getContentPane().add(newRecordForm);
     }
 
-    public void AddRow(String name, String type, String value, String ttl) {
-        model.addRow(new Object[]{name, type, value, ttl, "Edit", "Delete"});
+    public void AddRow(Record _record) {
+        model.addRow(new Object[]{_record.domain, _record.type, _record.name, _record.value, "Edit", "Delete"});
+        dp.addRecord(_record);
         table1.setModel(model);
     }
 
-    public void EditRow(String value, int row, int column) {
-        model.setValueAt(value, row, column);
+    public void UpdateRecord(Record rec, int row) {
+        model.setValueAt(rec.domain, row, 0);
+        model.setValueAt(rec.type, row, 1);
+        model.setValueAt(rec.name, row, 2);
+        model.setValueAt(rec.value, row, 3);
+        dp.updateRecord(rec);
     }
 
     public void DeleteRow(int row) {
         model.removeRow(row);
+        dp.deleteRecord(new Record(model.getValueAt(row, 0).toString(), model.getValueAt(row, 1).toString(), model.getValueAt(row, 2).toString(), model.getValueAt(row, 3).toString()));
     }
 
     private void init() {
-        setTitle("Domain Manager-" + Company);
+        setTitle("Domain Manager-" + conf.getName());
         setContentPane(panel1);
         setModal(true);
         //getRootPane().setDefaultButton(buttonOK);
-        int Width = 600;
+        int Width = 800;
         int Height = 600;
         // setSize(Width,Height);
         Dimension dim = new Dimension(Width, Height);
@@ -58,13 +65,14 @@ public class RecordForm extends JDialog {
         setLocationRelativeTo(this.getOwner());
         model = new DefaultTableModel(//
                 new Object[][]{},//data
-                new Object[]{"Name", "Type", "Value", "TTL", "Edit", "Delete"} // name of value
+                new Object[]{"Domain", "Type", "Name", "Value", "Edit", "Delete"} // name of value
         );
         table1.setModel(model);
         table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table1.setRowHeight(25);
         JTableHeader tableHeader = table1.getTableHeader();
         tableHeader.setPreferredSize(new Dimension(tableHeader.getWidth(), 30));
+        FillingRecord(conf.getName());
         ButtonColumn editButtonColumn = new ButtonColumn(this, table1, 4);
         ButtonColumn deleteButtonColumn = new ButtonColumn(this, table1, 5);
         btAdd.addActionListener(new ActionListener() {
@@ -74,6 +82,42 @@ public class RecordForm extends JDialog {
                 OpenNewRecordForm();
             }
         });
+    }
+
+    private void FillingRecord(String name) {
+        switch (name) {
+            case "CloudFlare":
+                dp = new CloudFlare(conf.getPublicKey(), conf.getPrivateKey());
+                break;
+            case "DigitalOcean":
+                dp = new DigitalOcean(conf.getPublicKey(), conf.getPrivateKey());
+                break;
+            case "GoDaddy":
+                dp = new GoDaddy(conf.getPublicKey(), conf.getPrivateKey());
+                break;
+            case "NameCheap":
+                dp = new NameCheap(conf.getPublicKey(), conf.getPrivateKey());
+                break;
+            case "NameSilo":
+                dp = new NameSilo(conf.getPublicKey(), conf.getPrivateKey());
+                break;
+            case "Name.com":
+                dp = new NameCom(conf.getPublicKey(), conf.getPrivateKey());
+                break;
+            case "Gandi":
+                dp = new Gandi(conf.getPublicKey(), conf.getPrivateKey());
+                break;
+            default:
+                dp = null;
+                break;
+        }
+        if (dp != null) {
+            Record[] records = dp.getRecords();
+            for (Record rc : records) {
+                AddRow(rc);
+            }
+        }
+
     }
 
     {
@@ -139,4 +183,6 @@ public class RecordForm extends JDialog {
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
+
+
 }
