@@ -48,9 +48,9 @@ public class Gandi extends DNSProvider {
         return result;
     }
 
-    public JSONObject getDomainRecords(String domain) {
+    public JSONArray getDomainRecords(String domain) {
         String url = String.format("https://api.gandi.net:0/v5/domain/domains/%s/hosts", domain );
-        return JSON.parseObject(API.GET(url , headers));
+        return JSON.parseArray(API.GET(url , headers));
     }
 
 
@@ -65,8 +65,7 @@ public class Gandi extends DNSProvider {
         for( Map.Entry<String, String> entryitr : ZoneMap.entrySet() ) {
             String domain = entryitr.getKey();
 
-            JSONObject jsonObj = this.getDomainRecords(domain);
-            JSONArray records = jsonObj.getJSONArray("result");
+            JSONArray records = this.getDomainRecords(domain);
 
             for(int n=0 ; n < records.size() ; n++) {
                 JSONObject record = records.getJSONObject(n);
@@ -127,8 +126,8 @@ public class Gandi extends DNSProvider {
     @Override
     public boolean deleteRecord(Record r) {
         String zoneid = this.getZones().get(r.domain);
-        JSONObject jsonObj = this.getDomainRecords( r.domain );
-        JSONArray records = jsonObj.getJSONArray("result");
+
+        JSONArray records = this.getDomainRecords( r.domain );
         String url = "https://api.gandi.net:0/v5/domain/domains/%s/hosts/%s";
 
         for(int n=0 ; n < records.size() ; n++) {
@@ -155,8 +154,8 @@ public class Gandi extends DNSProvider {
         String url = "https://api.gandi.net:0/v5/domain/domains/%s/hosts/%s" ;
 
         //finding the specific zoneid and recordid
-        JSONObject jsonObj = this.getDomainRecords( r.domain );
-        JSONArray records = jsonObj.getJSONArray("result");
+
+        JSONArray records = this.getDomainRecords( r.domain );
 
         //find the recordid
         for(int n=0 ; n < records.size() ; n++) {
@@ -176,15 +175,5 @@ public class Gandi extends DNSProvider {
         return true;
     }
 
-
-    public static void main(String[] args) {
-        Gandi gd = new Gandi("ApiKey","4c8394457166831f3d80fc7c98d9ad4a02ee1");
-        Record[] result = gd.getRecords();
-        for (Record r : result)
-        {
-            System.out.println(r);
-        }
-
-    }
 }
 
