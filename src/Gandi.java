@@ -1,39 +1,190 @@
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Gandi extends DNSProvider {
+    private HashMap<String, String> headers ;
 
     Gandi(String pubKey,String pravKey)
     {
         super(pubKey,pravKey);
+        headers = new HashMap<String,String>();
+        headers.put("authorization",String.format("%s %s",pubKey, pravKey) );
 
     }
+
+    public HashMap<String,String> getZones()
+    {
+        HashMap<String,String> result = null;
+
+        // 定义地址
+        String url = "https://api.gandi.net:0/v5/domain/domains";
+
+        // 调用得到结果
+        String returnStr = API.GET(url,headers);
+
+        // 处理JSON
+        JSONArray zones = JSON.parseArray(returnStr );
+
+
+
+        result = new HashMap<String,String>();
+
+//        System.out.println( returnStr );
+
+        for (int i = 0 ; i < zones.size(); i++)
+        {
+            JSONObject zone = zones.getJSONObject(i);
+            String zoneID = zone.get("id").toString();
+            String domain = zone.get("fqdn_unicode").toString();
+            result.put(domain,zoneID);
+        }
+
+
+        return result;
+    }
+
+    public JSONObject getDomainRecords(String domain) {
+        String url = String.format("https://api.gandi.net:0/v5/domain/domains/%s/hosts", domain );
+        return JSON.parseObject(API.GET(url , headers));
+    }
+
 
     @Override
     public Record[] getRecords() {
 
-        Record[] r = new Record[8];
+        HashMap<String,String> ZoneMap = this.getZones();
+        ArrayList<Record> RecordList = new ArrayList<Record>();
+        Record[] result = null ;
 
-        r[0] = new Record("kkkk.com","A","www","114.114.114.114");
-        r[1] = new Record("kkk.com","A","test","23.123.122.31");
-        r[2] = new Record("kkk.com","A","myblog","23.14.53.12");
-        r[3] = new Record("kkk.com","CNAME","direct","qq.com");
-        r[4] = new Record("withmylove.com","A","www","21.234.123.4");
-        r[5] = new Record("withmylove.com","TEXT","vary1","TEST TEST Records");
-        r[6] = new Record("withmylove.com","CNAME","gg","www.withmylove.com");
-        r[7] = new Record("withmylove.com","AAAA","ipv6","2620:0:2820:2210:70a:77c2:d184:76b9");
-        return r;
+
+        for( Map.Entry<String, String> entryitr : ZoneMap.entrySet() ) {
+            String domain = entryitr.getKey();
+
+            JSONObject jsonObj = this.getDomainRecords(domain);
+            JSONArray records = jsonObj.getJSONArray("result");
+
+            for(int n=0 ; n < records.size() ; n++) {
+                JSONObject record = records.getJSONObject(n);
+
+                if (!record.get("type").toString().equals("MX")) {
+
+                    String RecordDomain = record.get("fqdn").toString();
+                    String RecordName = record.get("name").toString();
+                    String RecordValue = record.get("ips").toString();
+
+                    String[] name_lst = RecordName.split("\\.");
+                    if (name_lst.length != 2) {
+                        RecordName = name_lst[0];
+                    }
+
+                    RecordList.add(new Record(RecordDomain, "", RecordName, RecordValue));
+                }
+            }
+        }
+
+        result = new Record[RecordList.size()];
+        for (int i = 0 ; i < RecordList.size(); i++)
+        {
+            result[i] = RecordList.get(i);
+        }
+
+        return result;
     }
+
+
 
     @Override
     public boolean addRecord(Record r) {
+        String url = String.format(" https://api.gandi.net:0/v5/domain/domains/%s/hosts", r.domain );
+
+        //json object- the details of new Record
+        JSONObject newrecord = new JSONObject();
+
+        newrecord.put("name", r.name) ;
+        newrecord.put("ips", r.value );
+
+        String returnStr = null ;
+        //post
+        try
+        {
+            returnStr = API.POST(url , headers, newrecord);
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+        //TODO: make returnStr -> JSONObject and check does it return success;
+        System.out.println(returnStr);
         return true;
     }
 
     @Override
     public boolean deleteRecord(Record r) {
+        String zoneid = this.getZones().get(r.domain);
+        JSONObject jsonObj = this.getDomainRecords( r.domain );
+        JSONArray records = jsonObj.getJSONArray("result");
+        String url = "https://api.gandi.net:0/v5/domain/domains/%s/hosts/%s";
+
+        for(int n=0 ; n < records.size() ; n++) {
+            JSONObject record = records.getJSONObject(n);
+
+            if( r.name.equals(record.getString("name").split("\\.")[0] ) ) {
+                String recordid = record.get("id").toString();
+                url = String.format(url, zoneid, recordid);
+                System.out.println(API.DELETE(url, headers, new JSONObject()));
+
+                //TODO: for Delete we don't need any new JSONObject
+                break;
+            }
+        }
+
         return true;
     }
 
     @Override
     public boolean updateRecord(Record r) {
+        //get all the Records in the Zone and initializer
+        String zoneid = this.getZones().get(r.domain);
+        String recordid = null;
+        String url = "https://api.gandi.net:0/v5/domain/domains/%s/hosts/%s" ;
+
+        //finding the specific zoneid and recordid
+        JSONObject jsonObj = this.getDomainRecords( r.domain );
+        JSONArray records = jsonObj.getJSONArray("result");
+
+        //find the recordid
+        for(int n=0 ; n < records.size() ; n++) {
+            JSONObject record = records.getJSONObject(n);
+
+            if (r.name.equals(record.getString("name").split("\\.")[0])) {
+                recordid = record.get("id").toString();
+                break;
+            }
+        }
+        url = String.format(url,zoneid,recordid);
+
+        //create the update json object for the PUT
+        JSONObject updateObj = new JSONObject();
+        updateObj.put("ips", r.value);
+        API.PUT(url, headers, updateObj);
         return true;
     }
+
+
+    public static void main(String[] args) {
+        Gandi gd = new Gandi("ApiKey","4c8394457166831f3d80fc7c98d9ad4a02ee1");
+        Record[] result = gd.getRecords();
+        for (Record r : result)
+        {
+            System.out.println(r);
+        }
+
+    }
 }
+
