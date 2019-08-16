@@ -36,7 +36,10 @@ public class DNSProviderForm extends JDialog {
         this.mainFm = _mainFm;
         init();
     }
-
+    
+    /**
+     * for ok button
+     */
     private void onOK() {
         // add your code here
 
@@ -44,6 +47,9 @@ public class DNSProviderForm extends JDialog {
         dispose();
     }
 
+    /**
+     * for cancel button
+     */
     private void onCancel() {
         // add your code here if necessary
         dispose();

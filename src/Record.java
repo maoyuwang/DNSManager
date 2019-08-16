@@ -1,9 +1,21 @@
+/**
+ * class includes information for each record
+ * @author rwu
+ *
+ */
 public class Record {
     public String domain;
     public String type;
     public String name;
     public String value;
 
+    /**
+     * constructor
+     * @param domian domain of the record
+     * @param type type of the record
+     * @param name name of the record
+     * @param value  value of the record
+     */
     public Record(String domian, String type,String name, String value)
     {
         this.domain = domian;
@@ -12,6 +24,9 @@ public class Record {
         this.value = value;
     }
 
+    /**
+     * create the new record
+     */
     @Override
     protected Object clone() throws CloneNotSupportedException {
         super.clone();
@@ -19,6 +34,9 @@ public class Record {
     }
 
 
+    /**
+     * include all information to string
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
