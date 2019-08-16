@@ -7,9 +7,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * A API Client for Godaddy Services.
+ */
 public class GoDaddy extends DNSProvider {
     private HashMap<String, String> headers;
 
+    /**
+     * Constructs a API Client for GoDaddy
+     * @param pubKey    The public key
+     * @param pravKey   The private key
+     */
     GoDaddy(String pubKey, String pravKey)
     {
         super(pubKey,pravKey);
@@ -21,7 +29,7 @@ public class GoDaddy extends DNSProvider {
     }
 
     /**
-     * Get all zones infomation from DigitalOcean.
+     * Get all zones infomation from Godaddy.
      * @return  A map contains all domains.
      */
     public HashMap<String,String> getZones(){
@@ -54,7 +62,7 @@ public class GoDaddy extends DNSProvider {
     }
 
     /**
-     * Get and return all records of all domains in this DigitalOcean Account.
+     * Get and return all records of all domains in this Account.
      * @return  All the records information.
      */
     @Override

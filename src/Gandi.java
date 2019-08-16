@@ -8,10 +8,7 @@ import java.util.Map;
 
 
 /**
- <<<<<<< HEAD
- * CloudFlare DNS provider extends from DNSProvider
- * @author rwu
- *
+ * A Client for calling Gandi API
  */
 public class Gandi extends DNSProvider {
     private HashMap<String, String> headers ;
@@ -19,8 +16,7 @@ public class Gandi extends DNSProvider {
     /**
      * Initialize a Gandi Client with given authentication information.
      * @param pubKey    The public key provided by CloudFlare.
-     * @param privKey   The private key provided by CloudFlare.
-    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
+     * @param pravKey   The private key provided by CloudFlare.
      */
     Gandi(String pubKey,String pravKey)
     {
@@ -31,13 +27,8 @@ public class Gandi extends DNSProvider {
     }
 
     /**
-     <<<<<<< HEAD
-     * method to get zone
-     * @return HashMap includes information get back from the DNS
-    =======
-     * Get all the zones information from CloudFlare.
+     * Get all the zones information from Gandi.
      * @return  A map that maps <zoneid:domain> relationship.
-    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
      */
     public HashMap<String,String> getZones()
     {
@@ -82,8 +73,8 @@ public class Gandi extends DNSProvider {
 
 
     /**
-     * Get All records of all domains of this CloudFlare account.
-     * @return  The array of all the Records of all domains owned by this CloudFlare account.
+     * Get All records of all domains of this account.
+     * @return  The array of all the Records of all domains owned by this account.
      */
     @Override
     public Record[] getRecords() {

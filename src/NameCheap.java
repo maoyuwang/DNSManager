@@ -7,19 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- <<<<<<< HEAD
- * CloudFlare DNS provider extends from DNSProvider
- * @author rwu
- *
+ * An API Client for NameCheap.
  */
 public class NameCheap extends DNSProvider {
     private HashMap<String, String> headers ;
 
     /**
      * Initialize a NameCheap Client with given authentication information.
-     * @param pubKey    The public key provided by CloudFlare.
-     * @param pravKey   The private key provided by CloudFlare.
-    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
+     * @param pubKey    The public key provided by NameCheap.
+     * @param pravKey   The private key provided by NameCheap.
      */
     NameCheap(String pubKey, String pravKey)
     {
@@ -30,13 +26,8 @@ public class NameCheap extends DNSProvider {
     }
 
     /**
-     <<<<<<< HEAD
-     * method to get zone
-     * @return HashMap includes information get back from the DNS
-    =======
-     * Get all the zones information from CloudFlare.
+     * Get all the zones information from NameCheap.
      * @return  A map that maps <zoneid:domain> relationship.
-    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
      */
     public HashMap<String,String> getZones()
     {
@@ -80,8 +71,8 @@ public class NameCheap extends DNSProvider {
     }
 
     /**
-     * Get All records of all domains of this CloudFlare account.
-     * @return  The array of all the Records of all domains owned by this CloudFlare account.
+     * Get All records of all domains of this NameCheap account.
+     * @return  The array of all the Records of all domains owned by this NameCheap account.
      */
     @Override
     public Record[] getRecords() {

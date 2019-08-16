@@ -7,19 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- <<<<<<< HEAD
- * CloudFlare DNS provider extends from DNSProvider
- * @author rwu
- *
+ * An API Client for Name.com
  */
 public class NameCom extends DNSProvider {
     private HashMap<String, String> headers ;
 
     /**
      * Initialize a NameCom Client with given authentication information.
-     * @param pubKey    The public key provided by CloudFlare.
-     * @param privKey   The private key provided by CloudFlare.
-    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
+     * @param pubKey    The public key.
+     * @param privKey   The private key.
      */
     NameCom(String pubKey, String privKey)
     {
@@ -30,13 +26,8 @@ public class NameCom extends DNSProvider {
     }
 
     /**
-     <<<<<<< HEAD
-     * method to get zone
-     * @return HashMap includes information get back from the DNS
-    =======
-     * Get all the zones information from CloudFlare.
+     * Get all the zones information from Name.com.
      * @return  A map that maps <zoneid:domain> relationship.
-    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
      */
     public HashMap<String,String> getZones()
     {
@@ -81,8 +72,8 @@ public class NameCom extends DNSProvider {
 
 
     /**
-     * Get All records of all domains of this CloudFlare account.
-     * @return  The array of all the Records of all domains owned by this CloudFlare account.
+     * Get All records of all domains of this Name.com account.
+     * @return  The array of all the Records of all domains owned by this Name.com account.
      */
     @Override
     public Record[] getRecords() {
