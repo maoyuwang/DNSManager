@@ -4,8 +4,18 @@ import java.util.*;
 import java.io.*;
 import okio.*;
 
+/**
+ * CloudFlare DNS provider extends from DNSProvider
+ * @author rwu
+ *
+ */
 public class CloudFlare extends DNSProvider {
     private HashMap<String, String> headers ;
+    /**
+     * constructor
+     * @param pubKey public key for DNS Provider
+     * @param privKey private key for DNS Provider
+     */
     public CloudFlare(String pubKey, String privKey) {
         super(pubKey, privKey);
         headers = new HashMap<String,String>();
@@ -18,17 +28,21 @@ public class CloudFlare extends DNSProvider {
         //getRecords<-----TODO: zone_id - record_id
     }
 
+    /**
+     * method to get zone
+     * @return HashMap includes information get back from the DNS 
+     */
     public HashMap<String,String> getZones()
     {
         HashMap<String,String> result = null;
 
-        // 定义地址
+        // å®šä¹‰åœ°å�€
         String url = "https://api.cloudflare.com/client/v4/zones?page=1&per_page=10&order=type&direction=asc";
 
-        // 调用得到结果
+        // è°ƒç”¨å¾—åˆ°ç»“æžœ
         String returnStr = API.GET(url,headers);
 
-        // 处理JSON
+        // å¤„ç�†JSON
         JSONObject jsonObj = JSON.parseObject(returnStr);
         JSONArray zones = jsonObj.getJSONArray("result");
 
