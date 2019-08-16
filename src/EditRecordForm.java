@@ -5,6 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * class for edit domain
+ * @author rwu
+ *
+ */
 public class EditRecordForm extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
@@ -16,10 +21,19 @@ public class EditRecordForm extends JDialog {
     private RecordForm reCordFm;
     private int index;
 
+    /**
+     * default constructor
+     */
     public EditRecordForm() {
         init();
     }
 
+    /**
+     * constructor 
+     * @param _reCordFm record form 
+     * @param _index which record is 
+     * @param rec detail informations for this record
+     */
     public EditRecordForm(RecordForm _reCordFm, int _index, Record rec) {
         this.reCordFm = _reCordFm;
         this.index = _index;

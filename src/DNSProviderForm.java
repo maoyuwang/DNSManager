@@ -7,6 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * class extends JDialog to create the "add" frmae
+ * @author rwu
+ *
+ */
 public class DNSProviderForm extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
@@ -16,10 +21,17 @@ public class DNSProviderForm extends JDialog {
     private JTextField tFPrivKey;
     private MainForm mainFm;
 
+    /**
+     * default constructor
+     */
     public DNSProviderForm() {
         init();
     }
 
+    /**
+     * constructor
+     * @param _mainFm main frame with initialization
+     */
     public DNSProviderForm(MainForm _mainFm) {
         this.mainFm = _mainFm;
         init();

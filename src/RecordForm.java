@@ -4,6 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * class to deal with records for a specific company
+ * @author rwu
+ *
+ */
 public class RecordForm extends JDialog {
     public JPanel panel1;
     private JPanel panel3;
@@ -16,28 +21,48 @@ public class RecordForm extends JDialog {
     private MainForm mainFm;
     public DNSProvider dp;
 
+    /**
+     * default constructor
+     */
     public RecordForm() {
         init();
     }
 
+    /**
+     * constructor
+     * @param _mainFm main form 
+     * @param _conf informations for the company
+     */
     public RecordForm(MainForm _mainFm, config _conf) {
         this.mainFm = _mainFm;
         this.conf = _conf;
         init();
     }
 
+    /**
+     * open frame for adding a new record
+     */
     private void OpenNewRecordForm() {
         NewRecordForm newRecordForm = new NewRecordForm(this);
         newRecordForm.setVisible(true);
         getContentPane().add(newRecordForm);
     }
 
+    /**
+     * show the new record in the frame 
+     * @param _record the new record need to be added
+     */
     public void AddRow(Record _record) {
         model.addRow(new Object[]{_record.domain, _record.type, _record.name, _record.value, "Edit", "Delete"});
         dp.addRecord(_record);
         table1.setModel(model);
     }
 
+    /**
+     * update a exist record
+     * @param rec the record that will be update
+     * @param row which row the record is on
+     */
     public void UpdateRecord(Record rec, int row) {
         model.setValueAt(rec.domain, row, 0);
         model.setValueAt(rec.type, row, 1);
@@ -46,6 +71,10 @@ public class RecordForm extends JDialog {
         dp.updateRecord(rec);
     }
 
+    /**
+     * method to delete a row
+     * @param row row to delete
+     */
     public void DeleteRow(int row) {
         
         System.out.println(">>>>>>DeleteRow");
@@ -88,6 +117,10 @@ public class RecordForm extends JDialog {
         });
     }
 
+    /**
+     * find records for the selected company
+     * @param name name of the company
+     */
     private void FillingRecord(String name) {
         switch (name) {
             case "CloudFlare":

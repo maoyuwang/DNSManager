@@ -4,6 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * class to implement the main frame of the application
+ * @author rwu
+ *
+ */
 public class MainForm extends JFrame {
     public JPanel panel1;
     private JPanel panel3;
@@ -16,6 +21,9 @@ public class MainForm extends JFrame {
     private TableColumn tc;
     public String[] provider_name = {"CloudFlare", "DigitalOcean", "GoDaddy", "NameCheap", "NameSilo", "Name.com", "Gandi"};
 
+    /**
+     * default constructor
+     */
     public MainForm() {
         // setBounds(300,300,800,600);
         setTitle("DNS Manager");
@@ -80,7 +88,7 @@ public class MainForm extends JFrame {
                 {
                     config conf = new config(model.getValueAt(selectedRow, 1).toString(), model.getValueAt(selectedRow, 2).toString(), model.getValueAt(selectedRow, 3).toString());
                     OpenRecordForm(conf);
-                    //修改指定的值：
+                    //ä¿®æ”¹æŒ‡å®šçš„å€¼ï¼š
                     // tableModel.setValueAt(aTextField.getText(), selectedRow, 0);
                     // tableModel.setValueAt(bTextField.getText(), selectedRow, 1);
                     //table.setValueAt(arg0, arg1, arg2)
@@ -89,16 +97,22 @@ public class MainForm extends JFrame {
         });
     }
 
-
+    /**
+     * method to open the frame to add new DNS Provider
+     */
     private void OpenDNSForm() {
         DNSProviderForm dnsFm = new DNSProviderForm(this);
         dnsFm.setVisible(true);
         getContentPane().add(dnsFm);
     }
-
+    
+    /**
+     * method to open frame contains all domain records for a specific company
+     * @param _conf information includes public key and private key of the company
+     */
     private void OpenRecordForm(config _conf) {
         if (_conf.getName().contentEquals("") || _conf.getPublicKey().contentEquals("") || _conf.getPrivateKey().contentEquals("")) {
-            JOptionPane.showMessageDialog(null, "Name、PublicKey、PrivateKey CANNOT be empty", "Warning", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Nameã€�PublicKeyã€�PrivateKey CANNOT be empty", "Warning", JOptionPane.ERROR_MESSAGE);
             return;
         }
         RecordForm recordFm = new RecordForm(this, _conf);
@@ -106,6 +120,10 @@ public class MainForm extends JFrame {
         getContentPane().add(recordFm);
     }
 
+    /**
+     * add a new record and show in the frame 
+     * @param _conf information includes public key and private key of the company
+     */
     public void AddRow(config _conf) {
         model.addRow(new Object[]{false, _conf.getName(), _conf.getPublicKey(), _conf.getPrivateKey()});
         table1.setModel(model);

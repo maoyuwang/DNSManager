@@ -7,6 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * class for adding a new domain
+ * @author rwu
+ *
+ */
 public class NewRecordForm extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
@@ -17,10 +22,17 @@ public class NewRecordForm extends JDialog {
     private JTextField tDomain;
     private RecordForm mainFm;
 
+    /**
+     * default constructor
+     */
     public NewRecordForm() {
         init();
     }
 
+    /**
+     * constructor
+     * @param _mainFm main frame
+     */
     public NewRecordForm(RecordForm _mainFm) {
         this.mainFm = _mainFm;
         init();

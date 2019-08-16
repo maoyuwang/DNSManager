@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 
 /** 
+ * class for configuration panel
  * available DNSManager:
  * 1)CloudFlare
  * 2)DigitalOcean
@@ -28,6 +29,11 @@ public class Configuration extends JFrame {
 	public ArrayList<config> provider_list;
 	public ArrayList<JPanel> panel_list; 
 	
+	/**
+	 * Set each small panel for each dns provider
+	 * @param provider_name	name of each provider
+	 * @return the panel for each DNS Provider
+	 */
 	public JPanel setEach(String provider_name) {
 		JPanel return_p = new JPanel();
 		return_p.setLayout(new BoxLayout(return_p, BoxLayout.Y_AXIS));
@@ -67,6 +73,9 @@ public class Configuration extends JFrame {
 
 	}
 
+	/**
+	 * default constructor
+	 */
     public Configuration() {
     	provider_list = new ArrayList<config>();
     	panel_list = new ArrayList<JPanel>();
@@ -146,8 +155,8 @@ public class Configuration extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
-    public static void main(String[] args) {
-    	Configuration panel = new Configuration();
-    	panel.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//    	Configuration panel = new Configuration();
+//    	panel.setVisible(true);
+//    }
 }
