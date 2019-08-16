@@ -1,8 +1,14 @@
 import java.sql.*;
 
+/**
+ * A DB class is a client used to connect SQLite Database.
+ */
 public class DB {
     private Connection c = null;
 
+    /**
+     * Construct a Database Client.
+     */
     DB()
     {
         try {
@@ -14,6 +20,11 @@ public class DB {
         System.out.println("Successfully Load SQLite Driver.");
     }
 
+    /**
+     * Execute a SQL SELECT Query.
+     * @param sqlString The SQL command to query.
+     * @return  The result set after executing the SQL query.
+     */
     public ResultSet executeQuery(String sqlString){
         String result = null;
         Statement stmt = null;
@@ -31,6 +42,11 @@ public class DB {
         return rs;
     }
 
+    /**
+     * Execute a SQL UPDATE/DELETE query.
+     * @param sqlString The SQL command to run.
+     * @return  The result set after running the SQL query.
+     */
     public int executeUpdate(String sqlString){
         Statement stmt = null;
         int rs = 0;
