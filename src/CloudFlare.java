@@ -5,6 +5,18 @@ import java.io.*;
 import okio.*;
 
 /**
+<<<<<<< HEAD
+ * CloudFlare DNS provider extends from DNSProvider
+ * @author rwu
+ *
+ */
+public class CloudFlare extends DNSProvider {
+    private HashMap<String, String> headers ;
+    /**
+     * constructor
+     * @param pubKey public key for DNS Provider
+     * @param privKey private key for DNS Provider
+=======
  * Represents a Client to CloudFlare Service.
  */
 public class CloudFlare extends DNSProvider {
@@ -14,6 +26,7 @@ public class CloudFlare extends DNSProvider {
      * Initialize a CloudFlare Client with given authentication information.
      * @param pubKey    The public key provided by CloudFlare.
      * @param privKey   The private key provided by CloudFlare.
+>>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
      */
     public CloudFlare(String pubKey, String privKey) {
         super(pubKey, privKey);
@@ -28,20 +41,25 @@ public class CloudFlare extends DNSProvider {
     }
 
     /**
+<<<<<<< HEAD
+     * method to get zone
+     * @return HashMap includes information get back from the DNS 
+=======
      * Get all the zones information from CloudFlare.
      * @return  A map that maps <zoneid:domain> relationship.
+>>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
      */
     public HashMap<String,String> getZones()
     {
         HashMap<String,String> result = null;
 
-        // 定义地址
+        // å®šä¹‰åœ°å�€
         String url = "https://api.cloudflare.com/client/v4/zones?page=1&per_page=10&order=type&direction=asc";
 
-        // 调用得到结果
+        // è°ƒç”¨å¾—åˆ°ç»“æžœ
         String returnStr = API.GET(url,headers);
 
-        // 处理JSON
+        // å¤„ç�†JSON
         JSONObject jsonObj = JSON.parseObject(returnStr);
         JSONArray zones = jsonObj.getJSONArray("result");
 
