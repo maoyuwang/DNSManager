@@ -1,10 +1,25 @@
+## Screenshots
+![screenshot.png](screenshot.png)
+
+## How To Run
+### Run
+```bash
+cd scripts/
+./CompileAndRun.sh
+```
+### Generate JavaDoc
+```bash
+cd scripts/
+./GenerateDocs.sh
+cd ../docs 	#To see all the generated javadocs.
+```
 Run CompileAndRun.cmd or CompileAndRun.sh under Scripts file to start the Application.
 
-1. In my main page, User can click "Add" to add a new DNSProvider with Company name, public key and private key. User can also click "delect"
-to delect a DNS Provider.
+## How To Use
 
-2. DNS Provider that the user add will all shown on the main page, then user need type 
-in the public key and private key, then select the checkbox in front the company name then click "config" to get to manage the domain.
+1. DNS Providers are shown on the main page. Users need type in the public key and private key, then select the checkbox in front the company name then click "config" to get to manage the domain.
 
-3. In the domain manage frame, all domains under this DNS Provider will show in the frame. Then user can choose to add a new domain or 
-edit or delect a exist domain.
+2. In the domain manage frame, all domains under this DNS Provider will show in the frame. Then user can choose to add a new domain or edit or delect a exist domain.
+
+## Slides
+See [slides.pdf](slides.pdf)
