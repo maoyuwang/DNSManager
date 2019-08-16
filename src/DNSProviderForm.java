@@ -148,7 +148,7 @@ public class DNSProviderForm extends JDialog {
     }
 
     /**
-     * @noinspection ALL
+     * @return The Root Component
      */
     public JComponent $$$getRootComponent$$$() {
         return contentPane;

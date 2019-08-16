@@ -27,7 +27,7 @@ public class NameCheap extends DNSProvider {
 
     /**
      * Get all the zones information from NameCheap.
-     * @return  A map that maps <zoneid:domain> relationship.
+     * @return  A map that maps (zoneid:domain) relationship.
      */
     public HashMap<String,String> getZones()
     {

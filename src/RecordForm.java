@@ -215,7 +215,8 @@ public class RecordForm extends JDialog {
     }
 
     /**
-     * @noinspection ALL
+     * Return the Root Component.
+     * @return The Root Component.
      */
     public JComponent $$$getRootComponent$$$() {
         return panel1;

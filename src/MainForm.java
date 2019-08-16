@@ -170,7 +170,8 @@ public class MainForm extends JFrame {
     }
 
     /**
-     * @noinspection ALL
+     * Return the Root Component.
+     * @return The Root Component.
      */
     public JComponent $$$getRootComponent$$$() {
         return panel1;

@@ -80,7 +80,7 @@ public class ButtonColumn extends AbstractCellEditor implements TableCellRendere
 
     /**
      * Get the Edit Value of the cell.
-     * @return
+     * @return  The value of the cell.
      */
     public Object getCellEditorValue() {
         return text;

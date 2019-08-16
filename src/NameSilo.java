@@ -26,7 +26,7 @@ public class NameSilo extends DNSProvider {
 
     /**
      * Get all the zones information from NameSilo.
-     * @return  A map that maps <zoneid:domain> relationship.
+     * @return  A map that maps (zoneid:domain) relationship.
      */
     public HashMap<String,String> getZones()
     {
