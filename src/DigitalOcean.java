@@ -4,10 +4,18 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.*;
 
+/**
+ * A API Client for DigitalOcean.
+ */
 public class DigitalOcean extends DNSProvider {
 
     private HashMap<String, String> headers ;
 
+    /**
+     * Construct a API client for DigitalOcean.
+     * @param pubKey    The public key.
+     * @param pravKey   The privateKey.
+     */
     DigitalOcean(String pubKey,String pravKey)
     {
         super(pubKey,pravKey);
@@ -19,6 +27,10 @@ public class DigitalOcean extends DNSProvider {
         headers.put("Content-Type","application/json");
     }
 
+    /**
+     * Get all zones infomation from DigitalOcean.
+     * @return  A map contains all domains.
+     */
     public HashMap<String,String> getZones(){
 
         HashMap<String,String> result = new HashMap<String,String>();
@@ -37,13 +49,21 @@ public class DigitalOcean extends DNSProvider {
         return result;
     }
 
+    /**
+     * Get and return the records of a given domain.
+     * @param domain    The domain to get all records.
+     * @return  A JSON object that contains record information of the given domain.
+     */
     public JSONObject getDomainRecords(String domain) {
         //getting all the records from one specific domain
         String url = String.format("https://api.digitalocean.com/v2/domains/%s/records", domain );
         return JSON.parseObject(API.GET(url , headers));
     }
 
-
+    /**
+     * Get and return all records of all domains in this DigitalOcean Account.
+     * @return  All the records information.
+     */
     @Override
     public Record[] getRecords() {
 
@@ -92,6 +112,11 @@ public class DigitalOcean extends DNSProvider {
         return result ;
     }
 
+    /**
+     * Add a specific record to this account.
+     * @param r The record to add.
+     * @return  true of false if this addition is successfully.
+     */
     @Override
     public boolean addRecord(Record r) {
 
@@ -112,6 +137,11 @@ public class DigitalOcean extends DNSProvider {
         return true;
     }
 
+    /**
+     * Delete a specific record from this account.
+     * @param r The record to delete.
+     * @return  true of false if this deletion is successfully.
+     */
     @Override
     public boolean deleteRecord(Record r) {
         JSONObject jsonObj = getDomainRecords(r.domain);
@@ -133,6 +163,11 @@ public class DigitalOcean extends DNSProvider {
         return true;
     }
 
+    /**
+     * Update a given record in this account.
+     * @param r The new record to be updated.
+     * @return  true of false if this action is successfully.
+     */
     @Override
     public boolean updateRecord(Record r) {
         JSONObject jsonObj = getDomainRecords(r.domain);
@@ -156,19 +191,5 @@ public class DigitalOcean extends DNSProvider {
         API.PUT(url, headers, updateObj);
 
         return true;
-    }
-
-    public static void main(String[] args) {
-        DigitalOcean DO = new DigitalOcean("Domain","e60ff79a8706c6d618fc64e6eed56f0b0eef89d9bb3c99e0e7f19b4681209b05");
-
-
-
-        DO.deleteRecord(new Record("function.club","A","test","127.0.0.1"));
-        Record[] result = DO.getRecords();
-        for (Record r : result)
-        {
-            System.out.println(r);
-        }
-
     }
 }

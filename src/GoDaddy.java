@@ -10,7 +10,7 @@ public class GoDaddy extends DNSProvider {
     public Record[] getRecords() {
 
         Record[] r = new Record[8];
-
+        System.out.println("System.out           hello");
         r[0] = new Record("function.club","A","www","114.114.114.114");
         r[1] = new Record("function.club","A","test","23.123.122.31");
         r[2] = new Record("function.club","A","myblog","23.14.53.12");
