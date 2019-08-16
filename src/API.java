@@ -67,7 +67,13 @@ public class API {
 
     }
 
-
+    /**
+     * Implementing HTTP PUT Method.
+     * @param url   The URL to make PUT requests
+     * @param headersMap    The headers of the PUT request
+     * @param jsonObject    The parameters to this request
+     * @return  The result String after executing the PUT request.
+     */
     public static String PUT(String url, HashMap<String,String> headersMap, JSONObject jsonObject){
         Headers headers = Headers.of(headersMap);
         String resultStr = null;
@@ -92,7 +98,13 @@ public class API {
         return resultStr;
 
     }
-
+    /**
+     * Implementing HTTP DELETE Method.
+     * @param url   The URL to make DELETE requests
+     * @param headersMap    The headers of the DELETE request
+     * @param jsonObject    The parameters to this request
+     * @return  The result String after executing the DELETE request.
+     */
     public static String DELETE(String url, HashMap<String,String> headersMap, JSONObject jsonObject){
         Headers headers = Headers.of(headersMap);
         String resultStr = null;

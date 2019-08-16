@@ -10,13 +10,16 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
-public class ButtonColumn extends AbstractCellEditor implements
-        TableCellRenderer, TableCellEditor, ActionListener {
-    JTable table;
-    JButton renderButton;
-    JButton editButton;
-    String text;
-    RecordForm reCordFm;
+
+/**
+ * A ButtonColumn Component provides Edit and Delete action for every record.
+ */
+public class ButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener {
+    private JTable table;
+    private JButton renderButton;
+    private JButton editButton;
+    private String text;
+    private RecordForm reCordFm;
 
     public ButtonColumn(RecordForm _reCordFm,JTable table, int column) {
         super();
@@ -32,6 +35,16 @@ public class ButtonColumn extends AbstractCellEditor implements
         columnModel.getColumn(column).setCellEditor(this);
     }
 
+    /**
+     *  Get the selected Rendered Table Cell component
+     * @param table The table to deal with.
+     * @param value The value of the text.
+     * @param isSelected    Check if this table is selected.
+     * @param hasFocus  Check if the table has focus.
+     * @param row   The row of the table
+     * @param column The column of the table.
+     * @return  The Rendered component.
+     */
     public Component getTableCellRendererComponent(JTable table, Object value,
                                                    boolean isSelected, boolean hasFocus, int row, int column) {
         if (hasFocus) {
@@ -49,6 +62,15 @@ public class ButtonColumn extends AbstractCellEditor implements
         return renderButton;
     }
 
+    /**
+     * Get the Edit component of the specific cell.
+     * @param table The table to deal with.
+     * @param value The value of the text
+     * @param isSelected    Check if the cell is selected
+     * @param row The row of the table.
+     * @param column    The column of the table.
+     * @return  The edit component.
+     */
     public Component getTableCellEditorComponent(JTable table, Object value,
                                                  boolean isSelected, int row, int column) {
         text = (value == null) ? " " : value.toString();
@@ -56,10 +78,18 @@ public class ButtonColumn extends AbstractCellEditor implements
         return editButton;
     }
 
+    /**
+     * Get the Edit Value of the cell.
+     * @return
+     */
     public Object getCellEditorValue() {
         return text;
     }
 
+    /**
+     * Handle all actions to this Component.
+     * @param e The action performed on this component.
+     */
     public void actionPerformed(ActionEvent e) {
         fireEditingStopped();
         int i=table.getSelectedRow();

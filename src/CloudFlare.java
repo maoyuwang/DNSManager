@@ -4,8 +4,17 @@ import java.util.*;
 import java.io.*;
 import okio.*;
 
+/**
+ * Represents a Client to CloudFlare Service.
+ */
 public class CloudFlare extends DNSProvider {
     private HashMap<String, String> headers ;
+
+    /**
+     * Initialize a CloudFlare Client with given authentication information.
+     * @param pubKey    The public key provided by CloudFlare.
+     * @param privKey   The private key provided by CloudFlare.
+     */
     public CloudFlare(String pubKey, String privKey) {
         super(pubKey, privKey);
         headers = new HashMap<String,String>();
@@ -18,6 +27,10 @@ public class CloudFlare extends DNSProvider {
         //getRecords<-----TODO: zone_id - record_id
     }
 
+    /**
+     * Get all the zones information from CloudFlare.
+     * @return  A map that maps <zoneid:domain> relationship.
+     */
     public HashMap<String,String> getZones()
     {
         HashMap<String,String> result = null;
@@ -50,12 +63,20 @@ public class CloudFlare extends DNSProvider {
         return result;
     }
 
+    /**
+     * Get All records from the domain.
+     * @param domain    The domain to get info.
+     * @return  The JSON object that contains the information of the given domain.
+     */
     public JSONObject getDomainRecords(String domain) {
         String url = String.format("https://api.cloudflare.com/client/v4/zones/%s/dns_records", this.getZones().get(domain) );
         return JSON.parseObject(API.GET(url , headers));
     }
 
-
+    /**
+     * Get All records of all domains of this CloudFlare account.
+     * @return  The array of all the Records of all domains owned by this CloudFlare account.
+     */
     @Override
     public Record[] getRecords() {
 
@@ -98,6 +119,11 @@ public class CloudFlare extends DNSProvider {
         return result;
     }
 
+    /**
+     * Add a new record.
+     * @param r The record to add.
+     * @return  true or false if this operation is successful.
+     */
     @Override
     public boolean addRecord(Record r) {
         //url
@@ -128,6 +154,11 @@ public class CloudFlare extends DNSProvider {
         return true;
     }
 
+    /**
+     * 
+     * @param r
+     * @return
+     */
     @Override
     public boolean deleteRecord(Record r) {
         //get all the Records in the Zone and initializer
