@@ -155,9 +155,9 @@ public class CloudFlare extends DNSProvider {
     }
 
     /**
-     * 
-     * @param r
-     * @return
+     * Delete a given record.
+     * @param r The record to delete.
+     * @return  true or false if this delete action is finished successfully.
      */
     @Override
     public boolean deleteRecord(Record r) {
@@ -184,6 +184,11 @@ public class CloudFlare extends DNSProvider {
             return true;
     }
 
+    /**
+     * update a given record.
+     * @param r The record to update.
+     * @return  true or false if this delete action is finished successfully.
+     */
     @Override
     public boolean updateRecord(Record r) {
         //get all the Records in the Zone and initializer
@@ -221,21 +226,6 @@ public class CloudFlare extends DNSProvider {
 
 
         return true;
-    }
-
-    public static void main(String[] args) {
-        CloudFlare cf = new CloudFlare("wang.maoyu@hotmail.com","4c8394457166831f3d80fc7c98d9ad4a02ee1");
-        cf.getRecords();
-        //cf.addRecord(new Record("ylws.me","A","test1", "114.114.114.114" ) );
-        cf.updateRecord(new Record("ylws.me","A","test1","127.0.0.1"));
-        cf.deleteRecord(new Record("ylws.me","A","test1",""));
-
-//        Record[] result = cf.getRecords();
-//        for (Record r : result)
-//        {
-//            System.out.println(r);
-//        }
-
     }
 
 
