@@ -6,17 +6,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ <<<<<<< HEAD
+ * CloudFlare DNS provider extends from DNSProvider
+ * @author rwu
+ *
+ */
 public class NameCom extends DNSProvider {
     private HashMap<String, String> headers ;
 
-    NameCom(String pubKey, String pravKey)
+    /**
+     * Initialize a NameCom Client with given authentication information.
+     * @param pubKey    The public key provided by CloudFlare.
+     * @param privKey   The private key provided by CloudFlare.
+    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
+     */
+    NameCom(String pubKey, String privKey)
     {
-        super(pubKey,pravKey);
+        super(pubKey,privKey);
 
         headers = new HashMap<String,String>();
         headers.put("username",this.getPrivateKey());
     }
 
+    /**
+     <<<<<<< HEAD
+     * method to get zone
+     * @return HashMap includes information get back from the DNS
+    =======
+     * Get all the zones information from CloudFlare.
+     * @return  A map that maps <zoneid:domain> relationship.
+    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
+     */
     public HashMap<String,String> getZones()
     {
         HashMap<String,String> result = null;
@@ -105,7 +126,11 @@ public class NameCom extends DNSProvider {
         return result;
     }
 
-
+    /**
+     * Add a new record.
+     * @param r The record to add.
+     * @return  true or false if this operation is successful.
+     */
     @Override
     public boolean addRecord(Record r) {
         //url
@@ -134,6 +159,11 @@ public class NameCom extends DNSProvider {
         return true;
     }
 
+    /**
+     * Delete a given record.
+     * @param r The record to delete.
+     * @return  true or false if this delete action is finished successfully.
+     */
     @Override
     public boolean deleteRecord(Record r) {
         //get all the Records in the Zone and initializer
@@ -157,6 +187,11 @@ public class NameCom extends DNSProvider {
         return true;
     }
 
+    /**
+     * update a given record.
+     * @param r The record to update.
+     * @return  true or false if this delete action is finished successfully.
+     */
     @Override
     public boolean updateRecord(Record r) {
         //get all the Records in the Zone and initializer

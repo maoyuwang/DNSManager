@@ -6,9 +6,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ <<<<<<< HEAD
+ * CloudFlare DNS provider extends from DNSProvider
+ * @author rwu
+ *
+ */
 public class NameCheap extends DNSProvider {
     private HashMap<String, String> headers ;
 
+    /**
+     * Initialize a NameCheap Client with given authentication information.
+     * @param pubKey    The public key provided by CloudFlare.
+     * @param pravKey   The private key provided by CloudFlare.
+    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
+     */
     NameCheap(String pubKey, String pravKey)
     {
         super(pubKey,pravKey);
@@ -17,6 +29,15 @@ public class NameCheap extends DNSProvider {
 
     }
 
+    /**
+     <<<<<<< HEAD
+     * method to get zone
+     * @return HashMap includes information get back from the DNS
+    =======
+     * Get all the zones information from CloudFlare.
+     * @return  A map that maps <zoneid:domain> relationship.
+    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
+     */
     public HashMap<String,String> getZones()
     {
         HashMap<String,String> result = null;
@@ -48,12 +69,20 @@ public class NameCheap extends DNSProvider {
         return result;
     }
 
+    /**
+     * Get All records from the domain.
+     * @param domain    The domain to get info.
+     * @return  The JSON object that contains the information of the given domain.
+     */
     public JSONArray getDomainRecords(String domain) {
         String url = String.format("https://api.namecheap.com/xml.response?ApiUser=%s&ApiKey=%s&UserName=%s&Command=namecheap.domains.dns.getList&ClientIp=127.0.0.1&SLD=domain&TLD=com", domain );
         return JSON.parseArray(API.GET(url , headers));
     }
 
-
+    /**
+     * Get All records of all domains of this CloudFlare account.
+     * @return  The array of all the Records of all domains owned by this CloudFlare account.
+     */
     @Override
     public Record[] getRecords() {
 
@@ -96,7 +125,11 @@ public class NameCheap extends DNSProvider {
     }
 
 
-
+    /**
+     * Add a new record.
+     * @param r The record to add.
+     * @return  true or false if this operation is successful.
+     */
     @Override
     public boolean addRecord(Record r) {
         String url = String.format("ttps://api.namecheap.com/xml.response?ApiUser=%s&ApiKey=%s&UserName=%s&Command=namecheap.users.address.create", r.domain, r.value , r.type );
@@ -117,6 +150,11 @@ public class NameCheap extends DNSProvider {
         return true;
     }
 
+    /**
+     * Delete a given record.
+     * @param r The record to delete.
+     * @return  true or false if this delete action is finished successfully.
+     */
     @Override
     public boolean deleteRecord(Record r) {
         String zoneid = this.getZones().get(r.domain);
@@ -138,6 +176,11 @@ public class NameCheap extends DNSProvider {
         return true;
     }
 
+    /**
+     * update a given record.
+     * @param r The record to update.
+     * @return  true or false if this delete action is finished successfully.
+     */
     @Override
     public boolean updateRecord(Record r) {
         //get all the Records in the Zone and initializer

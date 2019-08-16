@@ -6,16 +6,37 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ <<<<<<< HEAD
+ * CloudFlare DNS provider extends from DNSProvider
+ * @author rwu
+ *
+ */
 public class NameSilo extends DNSProvider {
     private HashMap<String, String> headers ;
 
-    NameSilo(String pubKey, String pravKey)
+    /**
+     * Initialize a NameSilo Client with given authentication information.
+     * @param pubKey    The public key provided by CloudFlare.
+     * @param privKey   The private key provided by CloudFlare.
+    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
+     */
+    NameSilo(String pubKey, String privKey)
     {
-        super(pubKey,pravKey);
+        super(pubKey,privKey);
         headers = new HashMap<String,String>();
 
     }
 
+    /**
+     <<<<<<< HEAD
+     * method to get zone
+     * @return HashMap includes information get back from the DNS
+    =======
+     * Get all the zones information from CloudFlare.
+     * @return  A map that maps <zoneid:domain> relationship.
+    >>>>>>> 02b466eab7eaae06b0ac3ccfae7cd83d6525bcbe
+     */
     public HashMap<String,String> getZones()
     {
         HashMap<String,String> result = null;
@@ -41,11 +62,20 @@ public class NameSilo extends DNSProvider {
         return result;
     }
 
+    /**
+     * Get All records from the domain.
+     * @param domain    The domain to get info.
+     * @return  The JSON object that contains the information of the given domain.
+     */
     public JSONObject getDomainRecords(String domain) {
         String url = String.format("https://www.namesilo.com/api/listDomains?version=1&type=json&key=%s&domain=%s",this.getPrivateKey() ,this.getZones().get(domain) );
         return JSON.parseObject(API.GET(url , headers));
     }
 
+    /**
+     * Get All records of all domains of this CloudFlare account.
+     * @return  The array of all the Records of all domains owned by this CloudFlare account.
+     */
     @Override
     public Record[] getRecords() {
         //get all zones we have & Initialize
@@ -89,6 +119,11 @@ public class NameSilo extends DNSProvider {
 
     }
 
+    /**
+     * Add a new record.
+     * @param r The record to add.
+     * @return  true or false if this operation is successful.
+     */
     @Override
     public boolean addRecord(Record r) {
         //url
@@ -119,6 +154,11 @@ public class NameSilo extends DNSProvider {
         return true;
     }
 
+    /**
+     * Delete a given record.
+     * @param r The record to delete.
+     * @return  true or false if this delete action is finished successfully.
+     */
     @Override
     public boolean deleteRecord(Record r) {
         //get all the Records in the Zone and initializer
@@ -142,6 +182,11 @@ public class NameSilo extends DNSProvider {
         return true;
     }
 
+    /**
+     * update a given record.
+     * @param r The record to update.
+     * @return  true or false if this delete action is finished successfully.
+     */
     @Override
     public boolean updateRecord(Record r) {
         //get all the Records in the Zone and initializer
